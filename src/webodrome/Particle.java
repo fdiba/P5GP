@@ -205,7 +205,17 @@ public class Particle {
 		int y = (int) location.y;
 	    
 		int loc = x + y * w;
-				
+		
+		editPixColor(host, loc, true);
+		
+		//----------- create blur by editing color of closed pixels -----------------//
+		
+		//editTopRightBottomLeftPixels(host, x, y);
+		//editXPixels(host, x, y);
+	      
+	}
+	private void editPixColor(HostImage host, int loc, boolean isCenter){
+		
 		int hostColor = host.img.pixels[loc];
 		int actualColor = pApplet.pixels[loc];
 		    
@@ -213,19 +223,95 @@ public class Particle {
 		int actualBlueValue = actualColor & 0xFF;
    
 		if (actualBlueValue >= hostBlueValue) { // same color bad spot
-			actualBlueValue = hostBlueValue;		    	
-	    	lifespan -= 5;
-	    } else { // not same color maybe good spot
+			
+			actualBlueValue = hostBlueValue;	
+			
+			if(isCenter) lifespan -= 5;
+	    
+		} else { // not same color maybe good spot
 	    	
-	    	int val = hostBlueValue/3;
+	    	int num = 1;
+	    	
+	    	if(isCenter) {
+	    		num = 3;
+	    	} else {
+	    		num = 10;
+	    	}
+	    	
+	    	int val = hostBlueValue/num;
+	    	
 	    	actualBlueValue += val;
 	    	if (actualBlueValue > hostBlueValue) actualBlueValue = hostBlueValue;
-	    	lifespan += (val/(255/3)) * 20; // --------------- TO DO param ---------------------//
+	    	
+	    	if(isCenter) lifespan += (val/(255/3)) * 20; // --------------- TO DO param ---------------------//
 	    	
 	    	int c = (actualBlueValue << 16) | (actualBlueValue << 8) | actualBlueValue;
 	    	pApplet.pixels[loc] = c;
 	    }
-	      
+		
+	}
+	private void editXPixels(HostImage host, int x, int y){
+		
+		int w = 640;
+		int h = 480;
+		
+		//-------------- top right ------------------//
+		if(x<w-1 && y>0){
+			int loc = x+1 + (y-1) * w;
+			editPixColor(host, loc, false);
+		}
+		
+		//-------------- top left ------------------//
+		if(x>0 && y>0){
+			int loc = x-1 + (y-1) * w;
+			editPixColor(host, loc, false);
+		}
+		
+		//-------------- bottom right ------------------//
+		if(x<w-1 && y>h-1){
+			int loc = x+1 + (y+1) * w;
+			editPixColor(host, loc, false);
+		}
+		
+		//-------------- bottom left ------------------//
+		if(x>0 && y>h-1){
+			int loc = x-1 + (y+1) * w;
+			editPixColor(host, loc, false);
+		}
+		
+	}
+	private void editTopRightBottomLeftPixels(HostImage host, int x, int y){
+		
+		int w = 640;
+		int h = 480;
+		
+		//-------------- right ------------------//		
+		if(x<w-1){ //not last pixel
+			int loc = x+1 + y * w;
+			editPixColor(host, loc, false);
+		}
+		
+		
+		//-------------- left ------------------//
+		if(x>0){ //not first pixel
+			int loc = x-1 + y * w;
+			editPixColor(host, loc, false);    	
+		}
+		
+		//-------------- top ------------------//		
+		if(y>0){ //not first row
+			int loc = x+1 + (y-1) * w;
+			editPixColor(host, loc, false);
+		}
+		
+		//-------------- bottom ------------------//
+		if(y<h-1){ //not last row
+			int loc = x+1 + (y+1) * w;
+			editPixColor(host, loc, false);
+		}
+		
+		
+		
 	}
 	@SuppressWarnings("unused")
 	private void display(){

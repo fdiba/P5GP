@@ -6,7 +6,7 @@ import webodrome.ParticleSystem;
 
 public class SeparationScene extends Scene {
 	
-	private String[] imageFiles = {"emma-watson-158356_w1000.jpg", "Scarlett-Johansson-faces.jpg"};
+	private String[] imageFiles = {"Scarlett-Johansson-faces.jpg"};
 	private HostImage host;
 	private ParticleSystem ps;
 	public boolean hasBeenSet;
@@ -17,7 +17,7 @@ public class SeparationScene extends Scene {
 		
 		//int id = (int) pApplet.random(imageFiles.length);
 		//host = new HostImage(this, imageFiles[id]);
-		host = new HostImage(pApplet, imageFiles[1]);
+		host = new HostImage(pApplet, imageFiles[0]);
 		host.removeColors();
 		
 		ps = new ParticleSystem(pApplet);

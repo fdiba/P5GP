@@ -10,7 +10,7 @@ public class ParticleSystem {
 	private PApplet pApplet;
 	
 	//------------ param -------------//
-	private int particlesMaxNumber = 20;
+	private int particlesMaxNumber = 30;
 	private int lifespanToGiveBirth = 80;
 	
 	public ArrayList<Particle> particles;
